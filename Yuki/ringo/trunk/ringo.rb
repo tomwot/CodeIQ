@@ -40,16 +40,16 @@ def get_ringo(ringos, char_count, answers, score)
     return nil
   elsif score1.nil?
     answers[char] = answer2
-    return score2.tap{|s| puts "a1, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
+    return score2 #.tap{|s| puts "a1, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
   elsif score2.nil?
     answers[char] = answer1
-    return score1.tap{|s| puts "a2, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
+    return score1 #.tap{|s| puts "a2, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
   elsif score1 > score2
     answers[char] = answer2
-    return score2.tap{|s| puts "a3, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
+    return score2 #.tap{|s| puts "a3, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
   else
     answers[char] = answer1
-    return score1.tap{|s| puts "a4, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
+    return score1 #.tap{|s| puts "a4, #{char}, #{answer1}, #{score1}, #{answer2}, #{score2}"}
   end
 end
 
@@ -57,16 +57,16 @@ puts start = Time.now
 
 typical = ARGF.read
 char_count = ("A".."Z").map{|char| [char, typical.count(char)]}.sort_by{|cc| -cc[1]}
-ringos = (1..5).to_a.map{|n| ['r', 'g', 'b'].repeated_permutation(n).to_a.map{|rr| rr.join}}.flatten
+ringos = (1..6).to_a.map{|n| ['r', 'g', 'b'].repeated_permutation(n).to_a.map{|rr| rr.join}}.flatten
 
 answers = Hash[*char_count.map{|c, n| [c, ""]}.flatten]
 
 score = get_ringo(ringos, char_count, answers, 0)
 
-puts finish = Time.now
-puts
-puts finish-start
-puts
-puts answers.map{|char, ringo| "#{char}:#{ringo}"}#.sort
-puts
-puts "score: #{score}"
+#puts finish = Time.now
+#puts
+#puts finish-start
+#puts
+puts answers.map{|char, ringo| "#{char}:#{ringo}"}.sort
+#puts
+#puts "score: #{score}"
