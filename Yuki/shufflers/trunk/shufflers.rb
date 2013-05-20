@@ -43,4 +43,4 @@ end while found
 answer = unknown.map{|id_ans, name_ans| "#{id_ans} = #{name_ans}"} +
   all.map{|id_rest, name_rest| "#{id_rest.join(' ')} = #{name_rest.join(' ')}"}
 
-puts answer.sort
+puts answer.uniq.sort
