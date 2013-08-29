@@ -1,14 +1,18 @@
 start = Time.now
 
-crossing = Array.new(314160, 0)
-
-n = ARGF.inject(0) do |sum, nod|
-  node = nod.to_i
-  count = crossing[node]
-  1.upto(node){|n| crossing[n] += 1}
-  sum + count
+n = 0
+nodes = []
+ARGF.each_with_index do |nd, i|
+  node  = nd.to_i
+  idx = i + 1
+  nodes[node] = true
+  if node == idx
+    n += nodes[(idx+1)..nodes.size].compact.size * 2
+  else
+    n += (node - idx).abs
+  end
 end
 
-puts n
+puts n / 2
 
 puts "Time: #{Time.now - start}"
