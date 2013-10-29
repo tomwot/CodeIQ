@@ -34,14 +34,16 @@ ARGF.each do |line|
 
     polyomino = card.each_with_index.select{|n, i| card.count(n) == POLYOMINO_SIZE}.map{|n, i| i.divmod(card_size)}
     unless polyomino.empty?
-      # area = ポリオミノを包含する長方形が占める領域
-      area_lt = [polyomino.map{|x, y| x}.min, polyomino.map{|x, y| y}.min] # Left-Top
-      area_rb = [polyomino.map{|x, y| x}.max, polyomino.map{|x, y| y}.max] # Right-Bottom
+      # area = ポリオミノに外接する長方形が占める領域
+      area_left   = polyomino.map{|x, y| x}.min
+      area_top    = polyomino.map{|x, y| y}.min
+      area_right  = polyomino.map{|x, y| x}.max
+      area_bottom = polyomino.map{|x, y| y}.max
 
-      break 'I' if area_rb[0] == area_lt[0] || area_rb[1] == area_lt[1]
-      break 'O' if area_rb[0] - area_lt[0] == 1 && area_rb[1] - area_lt[1] == 1
-      break 'L' if ([area_lt, area_rb, [area_lt[0], area_rb[1]], [area_rb[0], area_lt[1]]] & polyomino).size == 3
-      break 'T' if ([area_lt, area_rb] & polyomino).size == 1
+      break 'I' if area_right == area_left || area_bottom == area_top
+      break 'O' if area_right - area_left == 1 && area_bottom - area_top == 1
+      break 'L' if ([[area_left, area_top], [area_right, area_bottom], [area_left, area_bottom], [area_right, area_top]] & polyomino).size == 3
+      break 'T' if ([[area_left, area_top], [area_right, area_bottom]] & polyomino).size == 1
       break 'S'
     end
   end
