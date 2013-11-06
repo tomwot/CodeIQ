@@ -2,7 +2,9 @@ POLYOMINO_SIZE = 4 # ビンゴと判定するポリオミノのマス目の数
 POLYOMINO_SHAPES = %w(I L S O T)
 
 
-# 検出されたポリオミノの形を返す。
+# ポリオミノの形を返す。
+# 入力：ポリオミノを構成するマス目（2次元座標：整数値）
+# 出力：そのポリオミノの形を表すアルファベット1文字
 def detect_shape(polyomino)
   # area = ポリオミノに外接する長方形が占める領域
   area_left   = polyomino.map{|x, y| x}.min
@@ -36,8 +38,8 @@ ARGF.each do |line|
   card = line.chomp.split(/[\/,]/)
   card_size = line.split('/').first.split(',').size
 
-  shape = nil
-  ans = numbers.each_with_index.any? do |number, idx|
+  shape = '-'
+  numbers.each_with_index.any? do |number, idx|
     next unless (index = card.index(number))
 
     # 過去に振られた id とは異なる id を振る事が出来れば良いので、
@@ -54,16 +56,14 @@ ARGF.each do |line|
 
     next if neighbors.size == 1 # 無くても動くけど分かり易い足切りなので入れておく。
 
-    # 塗り潰した領域の連結
-    card.map!.with_index{|n, i| neighbors.member?(n) ? neighbors.min : n}
+    # 塗り潰した領域が連結したら同じ id とする。
+    card.each_with_index.select{|n, i| neighbors.member?(n)}.each{|n, i| card[i] = neighbors.min}
 
     polyomino = card.each_with_index.select{|n, i| card.count(n) == POLYOMINO_SIZE}.map{|n, i| i.divmod(card_size)}
     next if polyomino.empty?
 
     shape = detect_shape(polyomino)
   end
-
-  shape = '-' unless ans
 
   puts "#{line.chomp} #{shape}"
   answer[shape] += 1
