@@ -1,1 +1,1 @@
-main(n){for(;~scanf("%d",&n);n>100&&printf("%d\n",n*256+255));}
+main(n){for(;~scanf("%d",&n);n>>7&&printf("%d\n",n*256+255));}
