@@ -1,14 +1,8 @@
-three = (0...100).map{|n| 3**n}
-sum = three.dup
-i = 1
+n = 0
+b = []
 begin
-  modified = false
-  three.select{|t| t < sum.last}.combination(i+=1) do |tc|
-    if sum.last > (s=tc.inject(:+))
-      modified = true
-      sum[99] = s
-      sum.sort!
-    end
-  end
-end while modified
-sum.each{|s| puts s}
+  m = (n+=1)
+  m /= 3 while m >= 3 && m % 3 != 2
+  b << n if m < 2
+end until b.size == 100
+puts b
