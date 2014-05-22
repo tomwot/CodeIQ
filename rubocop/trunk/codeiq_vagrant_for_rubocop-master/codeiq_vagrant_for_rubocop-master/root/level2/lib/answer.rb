@@ -1,6 +1,8 @@
 class Answer 
+def a b=""#1
 if
-def a b=""
-if(not@@c=!! d.
-e());g(b),{h=>["#$1"%g(k),]*?k, },)end or f{||}
+(not@@c=!! d.
+e(){||});g( { :h=>[ "#$i"%j,]*?k, },)end or f
 end
+
+	end;
