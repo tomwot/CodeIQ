@@ -1,8 +1,8 @@
 class Answer 
-def a b=""#1
-if
-(not@@c=!! d.
-e(){||});g( {:h=>[ "#$i"%j,]*?k,},)end or f
-end
+
+def a b=c#1
+ if
+(not@@d=""%e);f.
+g( ){||}while(!! h({:i=>[$j, ]*?k,},))end;end
 
 	end;
