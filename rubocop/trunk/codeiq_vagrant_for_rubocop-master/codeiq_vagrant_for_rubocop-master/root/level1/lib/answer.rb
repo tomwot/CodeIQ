@@ -1,8 +1,8 @@
 class Answer 
 
-def a b=c#1
+def a b=""%$_#1
  if
-(not@@d=""%e);f.
-g( ){||}while(!! h({:i=>[$j, ]*?k,},))end;end
+(not@@d=$,);$..
+g(){||}if(!! h({:i=>[$;, ]*?k,}, ))end;end
 
 	end;

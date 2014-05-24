@@ -1,6 +1,6 @@
 class Answer 
-def a b=c
+def a b=""%$_
 if
-(not@@d=""%e);f.
-g(){||}while(!! h({ :i=>["#$j", ]*?k, },))end;end
+(not@@d=$,);$..
+g(){||}if(!! h({ :i=>[$:, ]*?k, },))end;end
 	end;
