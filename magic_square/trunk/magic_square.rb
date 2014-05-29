@@ -50,13 +50,18 @@ class MagicSquare
     end
   end
 
-  def change_sum(sum)
+  def change_sum(csum)
+    if csum % @n != 0
+      $stderr.puts "set argument as n*a (a = 0, 1, 2, ...)"
+      return []
+    end
+    
     if @n.odd?
       center = (@n**2 + 1) / 2
-      @table.map{|cell| cell - center + sum}.each_slice(@n)
+      @table.map{|cell| cell - center + csum/@n}.each_slice(@n)
     else
       center1 = @n**2 + 1
-      @table.map{|cell| cell*2 - center1 + sum}.each_slice(@n)
+      @table.map{|cell| cell*2 - center1 + csum/@n}.each_slice(@n)
     end
   end
 
