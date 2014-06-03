@@ -30,7 +30,7 @@ function run_all()
 
     function add_point( ix, r )
     {
-        var $point = $("#point_" + ix);
+        var $point = $("#table1point_" + ix);
         var cur = parseInt( $point.text(), 10 );
         $point.text( cur + [ 0, 10001, 30010 ][r + 1] );
     }
@@ -56,11 +56,17 @@ function run_all()
         ].join("<br/>");
     }
 
-    function update_table( a, b, diff )
+    function update_table2( table, a, b, score, diff )
     {
-        var $td = $("td#cell" + a + "_" + b);
-        $td.text( "L-W"[diff + 1] );
+        var $td = $("#table" + table + "cell" + a + "_" + b);
+        $td.text( score );
+        $td.removeClass();
         $td.addClass( ["lose", "even", "win"][diff + 1] );
+    }
+    
+    function update_table1( a, b, score, diff )
+    {
+        update_table2(1, a, b, score, diff);
         add_point( a, diff );
     }
 
@@ -68,12 +74,48 @@ function run_all()
     {
         var scores = calc_scores( hands );
         $("#log").append( "<hr noshade>" );
-        $("#log").append( log_info(args, scores, hands ) );
+        var self = "";
+        if (args[0].self || args[1].self) {
+            self = "self";
+        }
+        $("#log").append( "<div class='" + self + "'>" + log_info(args, scores, hands ) + "</div>" );
 
         var diff = sign(scores[0] - scores[1]);
-        update_table( args[0].ix, args[1].ix, diff );
-        update_table( args[1].ix, args[0].ix, - diff );
+        update_table1( args[0].ix, args[1].ix, scores[0], diff );
+        update_table1( args[1].ix, args[0].ix, scores[1], - diff );
     }
+
+    function sort_result(args) {
+        var n = 8;
+
+        var order = [];
+        for ( var x = 0 ; x < n ; ++x ) {
+            order.push(x);
+        }
+        order.sort(function(a, b){
+            var x = $("#table1point_" + a).text();
+            var y = $("#table1point_" + b).text();
+            return y - x;
+        });
+        for ( var i = 0 ; i < n ; ++i ) {
+            $("#table2name" + i).text($("#table1name" + order[i]).text());
+            $("#table2point_" + i).text($("#table1point_" + order[i]).text());
+            for ( var j = 0 ; j < n ; ++j ) {
+                if ( i != j ) {
+                    var scores = [
+                        $("#table1cell" + order[i] + "_" + order[j]).text(),
+                        $("#table1cell" + order[j] + "_" + order[i]).text()
+                        ];
+                    var diff = sign(scores[0] - scores[1]);
+                    
+                    update_table2( 2, i, j, scores[0], diff );
+                    update_table2( 2, j, i, scores[1], - diff );
+                }
+            }
+        }
+    }
+
+
     function play( args ) {
         var t0 = ( new Date() ).getTime();
         function curTick() {
@@ -103,6 +145,7 @@ function run_all()
                         nextHands();
                     } else {
                         show_result( args, hands, curTick() );
+                        sort_result( args );
                         players[0].terminate();
                         players[1].terminate();
                         return;
@@ -124,51 +167,62 @@ function run_all()
                 head += "<td class='gap'></td>";
             }
         }
-        $("table").append("<tr class='head'><th>#</th><th>name</th><th>point</th>" + head + "</tr>");
+        $("#table1").append("<tr class='head'><th>#</th><th>name</th><th>point</th>" + head + "</tr>");
+        $("#table2").append("<tr class='head'><th>#</th><th>name</th><th>point</th>" + head + "</tr>");
     }
     function build_table(srces)
     {
         append_head(srces);
         for ( var a = 0 ; a < srces.length ; ++a ) {
-            var s = "";
-            for ( var b = 0 ; b < srces.length ; ++b ) {
-                s += "<td id='cell" + a + "_" + b + "'>&nbsp;</td>";
-                if ( b%5 == 4 ) {
-                    s += "<td class='gap'></td>";
+            var s = ["", "", ""];
+            for (var t = 1 ; t < 3 ; ++t ) {
+                for ( var b = 0 ; b < srces.length ; ++b ) {
+                    s[t] += "<td id='table" + t + "cell" + a + "_" + b + "'>&nbsp;</td>";
+                    if ( b%5 == 4 ) {
+                        s[t] += "<td class='gap'></td>";
+                    }
                 }
             }
             if ( a%10 === 5 ) {
-                $("table").append("<tr class='gap'><td/></tr>");
+                $("#table1").append("<tr class='gap'><td/></tr>");
+                $("#table2").append("<tr class='gap'><td/></tr>");
             } else if ( a%10 === 0 && a ) {
                 append_head(srces);
             }
             var name = srces[a].substring( 0, srces[a].length-3 );
-            $("table").append("<tr><td>" + (a + 1) + "</td><th>" + name + "</th><td class='point' id='point_" + a + "'>0</td>" + s + "</tr>");
+            $("#table1").append("<tr><td>" + (a + 1) + "</td><th id='table1name" + a + "'>" + name + "</th><td class='point' id='table1point_" + a + "'>0</td>" + s[1] + "</tr>");
+            $("#table2").append("<tr><td>" + (a + 1) + "</td><th id='table2name" + a + "'>" + name + "</th><td class='point' id='table2point_" + a + "'>0</td>" + s[2] + "</tr>");
         }
         append_head(srces);
     }
 
-    $("p#log").empty();
-    $("table").empty();
-    var srces = [
+    $("#log").empty();
+    $("#table1").empty();
+    $("#table2").empty();
+    var srces_org = [
     "Amazing Opossum.js",
     "Careless Rabbit.js",
     "Fashionable  Crocodile.js",
     "King Pangolin.js",
     "Monday Sparrow.js",
     "Stone Believer.js",
-    "Ultimate Stone Slayer.js",
+    "Ultimate Stone Slayer.js"
+    ];
+    var srces_add = [
     "Your Code.js"
     ];
+    var srces = srces_org.concat(srces_add);
     build_table(srces);
     var plays = [];
     function startPlay(a, b) {
         play( [ {
             ix: a,
-            fn: srces[a] 
+            fn: srces[a],
+            self: (srces_add.indexOf(srces[a]) >= 0)
         }, {
             ix: b,
-            fn: srces[b] 
+            fn: srces[b], 
+            self: (srces_add.indexOf(srces[b]) >= 0)
         }
         ] );
     }

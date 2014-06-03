@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="./main.js"></script>
+<script type="text/javascript" src="./main2.js"></script>
 <style>
 table, th, td{ 
   font-size:9pt;
@@ -15,9 +15,9 @@ table, th, td{
 }
 td{
   background-color: #ddd;
-  text-align: center;
+  text-align: right;
   font-family: sans-serif;
-  font-size:xx-small;
+  font-size: small;
 }
 td.win{
   background-color: #efe;
@@ -64,10 +64,18 @@ p#log{
   font-size:xx-small;
   font-family:monospace;
 }
+div.self{
+  color: red;
+}
+table.result{
+/*  display: none;*/
+}
+
 </style>
 </head>
 <body>
-<table id="table" border="1"></table>
+<table id="table1" border="1"></table>
+<table id="table2" border="1"></table>
 <button onclick="javascript:run_all()">run all</button>
 <p id="log"></p>
 <script>
