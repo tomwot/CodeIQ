@@ -23,27 +23,51 @@ function period(str) {
 
 }
 
-// main.js からのデッドコピーに近しいもの
+var score_table = {
+    GC: 17,
+    CP: 10,
+    PG: 10 
+};
+
+
+// 過去の勝敗によるスコア取得状況を照会
 function score( hands, last ) {
-    var r = [0, 0];
-    var score_table = {
-        GC: 17,
-        CP: 10,
-        PG: 10 
-    };
+    var r = [[], []];
     for ( var i = hands[0].length - last ; i < hands[0].length ; ++i ) {
-        r[0] += score_table[ hands[0][i] + hands[1][i] ] || 0;
-        r[1] += score_table[ hands[1][i] + hands[0][i] ] || 0;
+        r[0].push( score_table[ hands[0][i] + hands[1][i] ] || 0);
+        r[1].push( score_table[ hands[1][i] + hands[0][i] ] || 0);
     }
     return r;
 }
 
 
+function consecutive_lose( h, n ) {
+    var s = score( h, n );
+    var enemy_last_score = 0;
+    var min_score = 9999;
+
+    for (var key in score_table) {
+        if ( min_score > score_table[key] ) {
+            min_score = score_table[key];
+        }
+    }
+
+    for ( var i = 0; i < n ; ++i ) {
+        enemy_last_score += s[1][i];
+    }
+
+    return (enemy_last_score >= min_score * n);
+}
+
+
+
 var hand_ini = "PGCG";
 var check_num = 8;
+var calc_last_score = 2;
 
 var looped = false;
 var count = -1;
+var win_hand = { G: "P", C: "G", P: "C" };
 
 function play(h)
 {
@@ -60,22 +84,13 @@ function play(h)
         return hand_ini[count%(hand_ini.length)];
     }
 
-    var enemy_hand_estimate = "";
-    var s = score( h, 2 );
-
-    if ( count - looped > check_num && s[1] >= 20) {
-        // ループを検出して少し経つのに連敗しているときは手を変える。
+    var enemy_hand_estimate = enemy_last_hand[check_num % prod];
+    // ループを検出して少し経つのに連敗しているときはパターンを変える。
+    if ( count - looped > check_num && consecutive_lose( h, calc_last_score ) ) {
         enemy_hand_estimate = h[1][h[1].length - 1];
-    } else {
-        enemy_hand_estimate = enemy_last_hand[check_num % prod];
     }
-    if ( enemy_hand_estimate == "P" ) {
-        return "C";
-    } else if ( enemy_hand_estimate == "G" ) {
-        return "P";
-    } else {
-        return "G";
-    }
+    
+    return win_hand[ enemy_hand_estimate ];
 }
 
 // イベントを受け取り、グーチョキパーのどれを出すかを返信するための仕組みです。
