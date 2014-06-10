@@ -85,10 +85,10 @@ function run_all()
         update_table1( args[1].ix, args[0].ix, scores[1], - diff );
     }
 
-    function sort_result(args) {
-        var n = 8;
-
+    function sort_result() {
+        var n = srces.length;
         var order = [];
+
         for ( var x = 0 ; x < n ; ++x ) {
             order.push(x);
         }
@@ -113,6 +113,8 @@ function run_all()
                 }
             }
         }
+        $("#table1").css("display", "none");
+        $("#table2").css("display", "block");
     }
 
 
@@ -145,9 +147,12 @@ function run_all()
                         nextHands();
                     } else {
                         show_result( args, hands, curTick() );
-                        sort_result( args );
                         players[0].terminate();
                         players[1].terminate();
+                        run -= 1;
+                        if (run == 0) {
+                            sort_result();
+                        }
                         return;
                     }
                 }
@@ -199,17 +204,60 @@ function run_all()
     $("#log").empty();
     $("#table1").empty();
     $("#table2").empty();
+    $("#table1").css("display", "block");
+    $("#table2").css("display", "none");
+
     var srces_org = [
-    "Amazing Opossum.js",
-    "Careless Rabbit.js",
-    "Fashionable  Crocodile.js",
-    "King Pangolin.js",
-    "Monday Sparrow.js",
-    "Stone Believer.js",
-    "Ultimate Stone Slayer.js"
+/*
+        "Amazing Opossum.js",
+        "Careless Rabbit.js",
+        "Fashionable  Crocodile.js",
+        "King Pangolin.js",
+        "Monday Sparrow.js",
+        "Stone Believer.js",
+        "Ultimate Stone Slayer.js"
+*/
+        "24D.js",
+        "alluser.js",
+        "antimon2.js",
+        "Anti_Predictor.js",
+        "arthor.js",
+        "carrotflakes.js",
+        "Choco_bar.js",
+        "ciel.js",
+        "douglas.js",
+        "EEL733.js",
+        "ex02xx.js",
+        "gogo.js",
+        "Golden_Finger.js",
+        "Gotch.js",
+        "jangken_P01.js",
+        "Jumping_Spider.js",
+        "Kezy.js",
+        "kksk.js",
+        "KoukiMino.js",
+        "mameta.js",
+        "Mega_Charizard_X.js",
+        "mijime.js",
+        "MikeCAT.js",
+        "Nikumo.js",
+        "oda1979.js",
+        "Opening_Middle_and_Final.js",
+        "permil.js",
+        "Prototype3.js",
+        "ryosy383.js",
+        "R_Fighter.js",
+        "suppy193.js",
+        "tbpgr.js",
+        "Terrible_Gasbombe.js",
+        "todaemon.js",
+        "xlune.js",
+        "yamato.js",
+        "__proto__.js"
     ];
+    
     var srces_add = [
-    "Your Code.js"
+        "tomwot.js"
     ];
     var srces = srces_org.concat(srces_add);
     build_table(srces);
@@ -226,9 +274,11 @@ function run_all()
         }
         ] );
     }
+    var run = 0;
     for ( var a = 0 ; a < srces.length ; ++a ) {
         for ( var b = 0 ; b < a ; ++b ) {
             startPlay(a, b);
+            run += 1;
         }
     }
 }
