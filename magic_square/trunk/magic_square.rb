@@ -44,7 +44,7 @@ class MagicSquare
       
       fail "Not Found." if @index < 0
       
-      break if table.map.with_index{|row, i| row[i]}.inject(&:+) == sum && table.map.with_index{|row, i| row[@n-i-1]}.inject(&:+) == sum
+      break if @index == @n**2
       
       @index -= 1
     end
@@ -75,17 +75,26 @@ class MagicSquare
     i, j = @index.divmod(@n)
     sum_current1 = @table[i*@n, @n].compact.inject(&:+)
     sum_current2 = @table.values_at(*(0...@n).map{|n| n*@n+j}).compact.inject(&:+)
-    if ((j <=> @n-1) == (sum_current1 <=> sum)) && ((i <=> @n-1) == (sum_current2 <=> sum))
+    sum_current3 = table.map.with_index{|row, i| row[i]}.compact.inject(&:+)
+    sum_current4 = table.map.with_index{|row, i| row[@n-i-1]}.compact.inject(&:+)
+
+    if (((j <=> @n-1) == (sum_current1 <=> sum)) &&
+      ((i <=> @n-1) == (sum_current2 <=> sum)) &&
+      (i     != j    || ((i <=> @n-1) == (sum_current3 <=> sum))) &&
+      (i + j != @n-1 || ((i <=> @n-1) == (sum_current4 <=> sum))))
       true
-    elsif sum_current1 > sum || sum_current2 > sum
-      false
-    else
+    elsif (((j == @n-1) && (sum_current1 < sum)) ||
+      ((i == @n-1) && (sum_current2 < sum)) ||
+      (i     == j    && ((i == @n-1) && (sum_current3 < sum))) ||
+      (i + j == @n-1 && ((i == @n-1) && (sum_current4 < sum))))
       nil
+    else
+      false
     end
   end
 
   def sum
-    @sum ||= (1..(@n**2)).inject(&:+) / @n
+    @sum ||= @n * ((@n**2) + 1) / 2
   end
 
 end
