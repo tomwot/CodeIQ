@@ -7,8 +7,6 @@
 # 以下オプション（総和をずらす）
 # 4. puts s.change_sum(sum)
 
-require "pry"
-
 class MagicSquare
   def initialize(n)
     @n = n
