@@ -20,7 +20,7 @@ class MagicSquare
     source[0] = nil
 
     index_table = (0..@n**2).to_a
-    index_table_diag = Array.new(@n){|ind| (@n + 1) * ind} + Array.new(@n){|ind| ind * @n + @n - ind - 1}
+    index_table_diag = Array.new(@n){|ind| (@n + 1) * ind} + Array.new(@n){|ind| (ind + 1) * (@n - 1)}
     index_table = (index_table_diag + index_table).uniq
 
     i = 0
@@ -80,10 +80,10 @@ class MagicSquare
   def check?(index)
     i, j = index.divmod(@n)
     sum_current = [
-    @table[i*@n, @n],                            # horisontal
-    @table.values_at(*(0...@n).map{|n| n*@n+j}), # vertical
-    table.map.with_index{|row, i| row[i]},       # back-slash
-    table.map.with_index{|row, i| row[@n-i-1]}   # slash
+    @table[i*@n, @n],                                        # horisontal
+    @table.values_at(*(0...@n).map{|n| @n * n + j}),         # vertical
+    @table.values_at(*(0...@n).map{|n| (@n + 1) * n}),       # back-slash
+    @table.values_at(*(0...@n).map{|n| (@n - 1) * (n + 1)}), # slash
     ]
 
     if sum_current.any?{|s| s.compact.inject(0, &:+) > sum}
