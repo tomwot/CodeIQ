@@ -17,36 +17,42 @@ class MagicSquare
 
   def make
     source = (0..@n**2+1).to_a
+    source[0] = nil
 
-    @index = 0
+    index_table = (0..@n**2).to_a
+    index_table_diag = Array.new(@n){|ind| (@n + 1) * ind} + Array.new(@n){|ind| ind * @n + @n - ind - 1}
+    index_table = (index_table_diag + index_table).uniq
+
+    i = 0
     loop do
-      while (0...@n**2).cover?(@index)
-        old_val = (@table[@index] || (@n**2 + 1))
+      while (0...@n**2).cover?(i)
+        index = index_table[i]
+        old_val = (@table[index] || @n**2 + 1)
         source[old_val] = old_val
         new_val = source.compact.reverse_each.find{|s| s < old_val}
         if new_val
-          @table[@index] = new_val
+          @table[index] = new_val
           source[new_val] = nil
-          result = check?
+          result = check?(index)
           if result
-            @index += 1
+            i += 1
             next
           end
         end
-        
-        current_val = @table[@index]
+
+        current_val = @table[index]
         source[current_val] = current_val
-        if result == nil || source[1...current_val].compact.empty?
-          @table[@index] = nil
-          @index -= 1
+        if new_val == nil || result == nil
+          @table[index] = nil
+          i -= 1
         end
       end
-      
-      fail "Not Found." if @index < 0
-      
-      break if @index == @n**2
-      
-      @index -= 1
+
+      fail "Not Found." if i < 0
+
+      break if i == @n**2
+
+      fail "???"
     end
   end
 
@@ -55,7 +61,7 @@ class MagicSquare
       $stderr.puts "set argument as n*a (a = 0, 1, 2, ...)"
       return []
     end
-    
+
     if @n.odd?
       center = (@n**2 + 1) / 2
       @table.map{|cell| cell - center + csum/@n}.each_slice(@n)
@@ -71,25 +77,25 @@ class MagicSquare
 
   private
 
-  def check?
-    i, j = @index.divmod(@n)
-    sum_current1 = @table[i*@n, @n].compact.inject(&:+)
-    sum_current2 = @table.values_at(*(0...@n).map{|n| n*@n+j}).compact.inject(&:+)
-    sum_current3 = table.map.with_index{|row, i| row[i]}.compact.inject(&:+)
-    sum_current4 = table.map.with_index{|row, i| row[@n-i-1]}.compact.inject(&:+)
+  def check?(index)
+    i, j = index.divmod(@n)
+    sum_current1 = @table[i*@n, @n]
+    sum_current2 = @table.values_at(*(0...@n).map{|n| n*@n+j})
+    sum_current3 = table.map.with_index{|row, i| row[i]}
+    sum_current4 = table.map.with_index{|row, i| row[@n-i-1]}
 
-    if (((j <=> @n-1) == (sum_current1 <=> sum)) &&
-      ((i <=> @n-1) == (sum_current2 <=> sum)) &&
-      (i     != j    || ((i <=> @n-1) == (sum_current3 <=> sum))) &&
-      (i + j != @n-1 || ((i <=> @n-1) == (sum_current4 <=> sum))))
-      true
-    elsif (((j == @n-1) && (sum_current1 < sum)) ||
-      ((i == @n-1) && (sum_current2 < sum)) ||
-      (i     == j    && ((i == @n-1) && (sum_current3 < sum))) ||
-      (i + j == @n-1 && ((i == @n-1) && (sum_current4 < sum))))
+    if ((sum_current1.compact.inject(&:+) > sum) ||
+      (sum_current2.compact.inject(&:+) > sum) ||
+      (sum_current3.any? && sum_current3.compact.inject(&:+) > sum) ||
+      (sum_current4.any? && sum_current4.compact.inject(&:+) > sum))
+      false
+    elsif ((sum_current1.all? && sum_current1.inject(&:+) < sum) ||
+      (sum_current2.all? && sum_current2.inject(&:+) < sum) ||
+      (sum_current3.all? && sum_current3.inject(&:+) < sum) ||
+      (sum_current4.all? && sum_current4.inject(&:+) < sum))
       nil
     else
-      false
+      true
     end
   end
 
@@ -103,7 +109,7 @@ end
 if $0 == __FILE__
   $stderr.puts start=Time.now
   $stderr.puts
- 
+
   square = MagicSquare.new((ARGV[0] || 3).to_i)
   square.make
   puts square.table.map{|row| row.join(' ')}
