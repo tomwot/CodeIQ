@@ -79,20 +79,16 @@ class MagicSquare
 
   def check?(index)
     i, j = index.divmod(@n)
-    sum_current1 = @table[i*@n, @n]
-    sum_current2 = @table.values_at(*(0...@n).map{|n| n*@n+j})
-    sum_current3 = table.map.with_index{|row, i| row[i]}
-    sum_current4 = table.map.with_index{|row, i| row[@n-i-1]}
+    sum_current = [
+    @table[i*@n, @n],                            # horisontal
+    @table.values_at(*(0...@n).map{|n| n*@n+j}), # vertical
+    table.map.with_index{|row, i| row[i]},       # back-slash
+    table.map.with_index{|row, i| row[@n-i-1]}   # slash
+    ]
 
-    if ((sum_current1.compact.inject(0, &:+) > sum) ||
-      (sum_current2.compact.inject(0, &:+) > sum) ||
-      (sum_current3.compact.inject(0, &:+) > sum) ||
-      (sum_current4.compact.inject(0, &:+) > sum))
+    if sum_current.any?{|s| s.compact.inject(0, &:+) > sum}
       false
-    elsif ((sum_current1.all? && sum_current1.inject(&:+) < sum) ||
-      (sum_current2.all? && sum_current2.inject(&:+) < sum) ||
-      (sum_current3.all? && sum_current3.inject(&:+) < sum) ||
-      (sum_current4.all? && sum_current4.inject(&:+) < sum))
+    elsif sum_current.any?{|s| s.all? && s.inject(&:+) < sum}
       nil
     else
       true
