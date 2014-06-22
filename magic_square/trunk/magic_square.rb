@@ -84,10 +84,10 @@ class MagicSquare
     sum_current3 = table.map.with_index{|row, i| row[i]}
     sum_current4 = table.map.with_index{|row, i| row[@n-i-1]}
 
-    if ((sum_current1.compact.inject(&:+) > sum) ||
-      (sum_current2.compact.inject(&:+) > sum) ||
-      (sum_current3.any? && sum_current3.compact.inject(&:+) > sum) ||
-      (sum_current4.any? && sum_current4.compact.inject(&:+) > sum))
+    if ((sum_current1.compact.inject(0, &:+) > sum) ||
+      (sum_current2.compact.inject(0, &:+) > sum) ||
+      (sum_current3.compact.inject(0, &:+) > sum) ||
+      (sum_current4.compact.inject(0, &:+) > sum))
       false
     elsif ((sum_current1.all? && sum_current1.inject(&:+) < sum) ||
       (sum_current2.all? && sum_current2.inject(&:+) < sum) ||
