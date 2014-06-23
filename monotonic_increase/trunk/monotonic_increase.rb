@@ -1,14 +1,12 @@
-require 'pry'
-
 def divide(n)
-  question = [[0, n]]
-
+  question = [[n]]
   memo = Hash.new{0}
+
   loop do
     answer = []
     question.each do |q|
       next if memo[q.last] > q.count
-      before, last = q[-2..-1]
+      before, last = (q[-2..-1] || [0, n])
       before.to_s.length.upto(last.to_s.length / 2) do |digit|
         now  = last.to_s[0...digit].to_i
         rest = last.to_s[digit..-1].to_i
@@ -25,7 +23,7 @@ def divide(n)
     question = answer.dup
   end
 
-  question.map{|q| q[1..-1]}
+  question
 end
 
 
