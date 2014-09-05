@@ -39,8 +39,8 @@ class UnitEquation
 
   @@unit_conversion = Hash[
   *File.readlines(UNIT_CONVERSION).flat_map do |equation|
-    unit_nums = equation.chomp.split('=').map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}
-    unit_nums.flat_map{|un| un[1] = unit_nums.transpose[1].max / un[1]; un}
+    unit_nums = Hash[*equation.chomp.split('=').flat_map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}]
+    unit_nums.flat_map{|unit, scale| [unit, unit_nums.values.max / scale]}
   end
   ]
 
