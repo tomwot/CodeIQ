@@ -1,4 +1,4 @@
-#coding: Windows-31J
+#coding: Shift_JIS
 
 class Equation
   attr_reader :equ, :ans
@@ -28,23 +28,24 @@ class Equation
 
   def parse(formula)
     sign = '+'
-    formula.scan(/([-+]?)(\d+|Å†)([^-+\dÅ†]+)/).map do |unit_num_arr|
-      unit_num_arr[0] = sign if unit_num_arr[0].empty?
-      sign = unit_num_arr[0]
-      unit_num_arr
+    formula.scan(/([-+]?)(\d+|Å†)([^-+\dÅ†]+)/).map do |unit_num_str|
+      unit_num_str[0] = sign if unit_num_str[0].empty?
+      sign = unit_num_str[0]
+      unit_num_str
     end
   end
 
   def minimum_unit_multiple(unit)
-    @@hash ||= Hash[
-    *DATA.flat_map do |equation|
+    @@unit_conversion_table ||= Hash[
+    *File.readlines(UNIT_CONVERSION).flat_map do |equation|
       unit_nums = equation.chomp.split('=').map{|formula| parse(formula).flat_map{|un| [un[2], un[1].to_i]}}
-      unit_nums.flat_map{|uns| uns[1] = unit_nums.last[1] / uns[1]; uns}
+      unit_nums.flat_map{|un| un[1] = unit_nums.transpose[1].max / un[1]; un}
     end
     ]
-    fail "Can't find unit(#{unit}) in unit table" unless @@hash.key?(unit)
-    @@hash[unit]
+    @@unit_conversion_table[unit] || fail("Can't find unit(#{unit}) in #{UNIT_CONVERSION}")
   end
+
+  UNIT_CONVERSION = 'unit_conversion.txt'
 end
 
 
@@ -54,16 +55,10 @@ ARGF.each do |line|
   no, *equ = line.chomp.split("\t")
   equation = equ.map{|e| Equation.new(e)}
   equation.each{|e| e.solve}
-  if equation.all?{|e| e.ans == equation.first.ans}
+  if equation.map(&:ans).uniq.size == 1
     puts "#{no}: Correct."
   else
     puts "#{no}: Wrong."
     puts equation.map{|e| "equation = #{e.equ}, answer = #{e.ans}"}
   end
 end
-
-
-__END__
-1km=1000m=100000cm=1000000mm
-1kg=1000g=1000000mg
-1ì˙=24éûä‘=1440ï™=86400ïb
