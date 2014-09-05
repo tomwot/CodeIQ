@@ -149,11 +149,11 @@ T40: Correct.
 109: Correct.
 110: Correct.
 111: Wrong.
-equation:  “ú+124750200•b=8403“ú20ŠÔ50•ª, answer: 6960
-equation:  g+831mg=29g831mg, answer: 29
+  equation:  “ú+124750200•b=8403“ú20ŠÔ50•ª, answer: 6960
+  equation:  g+831mg=29g831mg, answer: 29
 112: Wrong.
-equation: 359220mg+104g717mg+ mg=848937mg, answer: 385000
-equation:  ŠÔ+13“ú18ŠÔ+5“ú=835ŠÔ, answer: 385
+  equation: 359220mg+104g717mg+ mg=848937mg, answer: 385000
+  equation:  ŠÔ+13“ú18ŠÔ+5“ú=835ŠÔ, answer: 385
 113: Correct.
 114: Correct.
 115: Correct.
@@ -264,11 +264,11 @@ equation:  ŠÔ+13“ú18ŠÔ+5“ú=835ŠÔ, answer: 385
 220: Correct.
 221: Correct.
 222: Wrong.
-equation: 789kg-150kg-49kg= kg, answer: 590
-equation: 100mm+ cm+128mm=818mm, answer: 59
+  equation: 789kg-150kg-49kg= kg, answer: 590
+  equation: 100mm+ cm+128mm=818mm, answer: 59
 223: Wrong.
-equation: 9km540m-4km- km=1540m, answer: 4
-equation:  cm+4300mm+8400mm=22300mm, answer: 960
+  equation: 9km540m-4km- km=1540m, answer: 4
+  equation:  cm+4300mm+8400mm=22300mm, answer: 960
 224: Correct.
 225: Correct.
 226: Correct.
@@ -379,11 +379,11 @@ equation:  cm+4300mm+8400mm=22300mm, answer: 960
 331: Correct.
 332: Correct.
 333: Wrong.
-equation: 29•ª55•b+3ŠÔ21•ª5•b+ •ª=30480•b, answer: 277
-equation: 493kg823g-10kg200g- g=206kg623g, answer: 277000
+  equation: 29•ª55•b+3ŠÔ21•ª5•b+ •ª=30480•b, answer: 277
+  equation: 493kg823g-10kg200g- g=206kg623g, answer: 277000
 334: Wrong.
-equation: 11098mg- g-2g318mg=780mg, answer: 8
-equation:  cm+1301mm+2m45cm=8m55cm1mm, answer: 480
+  equation: 11098mg- g-2g318mg=780mg, answer: 8
+  equation:  cm+1301mm+2m45cm=8m55cm1mm, answer: 480
 335: Correct.
 336: Correct.
 337: Correct.
@@ -494,11 +494,11 @@ equation:  cm+1301mm+2m45cm=8m55cm1mm, answer: 480
 442: Correct.
 443: Correct.
 444: Wrong.
-equation: 1730“ú+480“ú- “ú=600“ú, answer: 1610
-equation: 61000mm+152164mm-52164mm= m, answer: 161
+  equation: 1730“ú+480“ú- “ú=600“ú, answer: 1610
+  equation: 61000mm+152164mm-52164mm= m, answer: 161
 445: Wrong.
-equation: 12480•b+11ŠÔ35•ª36•b-7416•b= ŠÔ, answer: 13
-equation: 152900m+41000m- km=63km900m, answer: 130
+  equation: 12480•b+11ŠÔ35•ª36•b-7416•b= ŠÔ, answer: 13
+  equation: 152900m+41000m- km=63km900m, answer: 130
 446: Correct.
 447: Correct.
 448: Correct.
@@ -609,11 +609,11 @@ equation: 152900m+41000m- km=63km900m, answer: 130
 553: Correct.
 554: Correct.
 555: Wrong.
-equation: 35230cm- m=15730cm, answer: 195
-equation: 8ŠÔ33•ª- •ª-3ŠÔ7•ª=7920•b, answer: 194
+  equation: 35230cm- m=15730cm, answer: 195
+  equation: 8ŠÔ33•ª- •ª-3ŠÔ7•ª=7920•b, answer: 194
 556: Wrong.
-equation: 372804312•b-1291“ú11ŠÔ50•ª-116499312•b= ŠÔ, answer: 40200
-equation: 447km590m+442000m-219km590m= km, answer: 670
+  equation: 372804312•b-1291“ú11ŠÔ50•ª-116499312•b= ŠÔ, answer: 40200
+  equation: 447km590m+442000m-219km590m= km, answer: 670
 557: Correct.
 558: Correct.
 559: Correct.
@@ -724,11 +724,11 @@ equation: 447km590m+442000m-219km590m= km, answer: 670
 664: Correct.
 665: Correct.
 666: Wrong.
-equation: 659m50cm6mm+118000mm+ m=1451506mm, answer: 674
-equation: 1594564478cm- km-385876178cm=534688300cm, answer: 6740
+  equation: 659m50cm6mm+118000mm+ m=1451506mm, answer: 674
+  equation: 1594564478cm- km-385876178cm=534688300cm, answer: 6740
 667: Wrong.
-equation: 53200cm+150m-309m= m, answer: 373
-equation: 173187km732m46cm+2999km918m-86667650460mm= km, answer: 89520
+  equation: 53200cm+150m-309m= m, answer: 373
+  equation: 173187km732m46cm+2999km918m-86667650460mm= km, answer: 89520
 668: Correct.
 669: Correct.
 670: Correct.
@@ -839,11 +839,11 @@ equation: 173187km732m46cm+2999km918m-86667650460mm= km, answer: 89520
 775: Correct.
 776: Correct.
 777: Wrong.
-equation: 23070000mg-7685200mg-3384800mg= kg, answer: 12
-equation: 3“ú12ŠÔ48•ª+1“ú23ŠÔ23•ª-43860•b= ŠÔ, answer: 120
+  equation: 23070000mg-7685200mg-3384800mg= kg, answer: 12
+  equation: 3“ú12ŠÔ48•ª+1“ú23ŠÔ23•ª-43860•b= ŠÔ, answer: 120
 778: Wrong.
-equation: 10562495cm+ km+20km675m10cm=23230005cm, answer: 106
-equation: 39729kg357g280mg-6592344800mg- kg=7697kg12g480mg, answer: 25440
+  equation: 10562495cm+ km+20km675m10cm=23230005cm, answer: 106
+  equation: 39729kg357g280mg-6592344800mg- kg=7697kg12g480mg, answer: 25440
 779: Correct.
 780: Correct.
 781: Correct.
@@ -954,11 +954,11 @@ equation: 39729kg357g280mg-6592344800mg- kg=7697kg12g480mg, answer: 25440
 886: Correct.
 887: Correct.
 888: Wrong.
-equation: 90kg472g+ kg+186382000mg=482kg854g, answer: 206
-equation: 3828km629m98cm- km-1023km410m=745km219m98cm, answer: 2060
+  equation: 90kg472g+ kg+186382000mg=482kg854g, answer: 206
+  equation: 3828km629m98cm- km-1023km410m=745km219m98cm, answer: 2060
 889: Wrong.
-equation: 11km568m+189402580mm+ km=440km970m58cm, answer: 240
-equation: 21ŠÔ36•ª+ ŠÔ=1“ú21ŠÔ36•ª, answer: 24
+  equation: 11km568m+189402580mm+ km=440km970m58cm, answer: 240
+  equation: 21ŠÔ36•ª+ ŠÔ=1“ú21ŠÔ36•ª, answer: 24
 890: Correct.
 891: Correct.
 892: Correct.
@@ -1069,6 +1069,6 @@ equation: 21ŠÔ36•ª+ ŠÔ=1“ú21ŠÔ36•ª, answer: 24
 997: Correct.
 998: Correct.
 999: Wrong.
-equation: 879630km= km, answer: 879630
-equation: 4592693940•b+42786“ú20ŠÔ40•ª36•b- “ú=689475576•b, answer: 87963
+  equation: 879630km= km, answer: 879630
+  equation: 4592693940•b+42786“ú20ŠÔ40•ª36•b- “ú=689475576•b, answer: 87963
 1000: Correct.

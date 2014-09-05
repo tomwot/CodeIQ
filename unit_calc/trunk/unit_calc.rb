@@ -3,14 +3,23 @@
 class Equation
   attr_reader :equ, :ans
 
+  UNIT_CONVERSION = 'unit_conversion.txt'
+
   def initialize(equ)
     @equ = equ
+
+    @@unit_conversion = Hash[
+    *File.readlines(UNIT_CONVERSION).flat_map do |equation|
+      unit_nums = equation.chomp.split('=').map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}
+      unit_nums.flat_map{|un| un[1] = unit_nums.transpose[1].max / un[1]; un}
+    end
+    ]
   end
 
   def solve
     left_str, right_str = @equ.split('=')
 
-    unit_nums_str = self.class.parse(left_str) + self.class.parse(right_str).map{|r| r[:sign] = (r[:sign] == '-' ? '+' : '-'); r}
+    unit_nums_str = parse(left_str) + parse(right_str).map{|r| r[:sign] = (r[:sign] == '-' ? '+' : '-'); r}
 
     unknown = unit_nums_str.find{|un| un[:num_str] == 'Å†'}
     unit_nums_str.delete(unknown)
@@ -26,7 +35,7 @@ class Equation
 
   private
 
-  def self.parse(formula)
+  def parse(formula)
     sign_before = '+'
     formula.scan(/([-+]?)(\d+|Å†)([^-+\dÅ†]+)/).map do |sign, num_str, unit|
       sign = sign_before if sign.empty?
@@ -34,15 +43,6 @@ class Equation
       {sign: sign, num_str: num_str, unit: unit}
     end
   end
-
-  UNIT_CONVERSION = 'unit_conversion.txt'
-
-  @@unit_conversion = Hash[
-    *File.readlines(UNIT_CONVERSION).flat_map do |equation|
-    unit_nums = equation.chomp.split('=').map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}
-      unit_nums.flat_map{|un| un[1] = unit_nums.transpose[1].max / un[1]; un}
-    end
-    ]
 end
 
 
@@ -56,6 +56,6 @@ ARGF.each do |line|
     puts "#{no}: Correct."
   else
     puts "#{no}: Wrong."
-    puts equation.map{|e| "equation: #{e.equ}, answer: #{e.ans}"}
+    puts equation.map{|e| "  equation: #{e.equ}, answer: #{e.ans}"}
   end
 end
