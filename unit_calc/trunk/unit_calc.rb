@@ -1,19 +1,10 @@
 #coding: Windows-31J
 
-class Equation
+class UnitEquation
   attr_reader :equ, :ans
-
-  UNIT_CONVERSION = 'unit_conversion.txt'
 
   def initialize(equ)
     @equ = equ
-
-    @@unit_conversion = Hash[
-    *File.readlines(UNIT_CONVERSION).flat_map do |equation|
-      unit_nums = equation.chomp.split('=').map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}
-      unit_nums.flat_map{|un| un[1] = unit_nums.transpose[1].max / un[1]; un}
-    end
-    ]
   end
 
   def solve
@@ -35,13 +26,26 @@ class Equation
 
   private
 
-  def parse(formula)
+  def self.parse(formula)
     sign_before = '+'
     formula.scan(/([-+]?)(\d+|□)([^-+\d□]+)/).map do |sign, num_str, unit|
       sign = sign_before if sign.empty?
       sign_before = sign
       {sign: sign, num_str: num_str, unit: unit}
     end
+  end
+
+  UNIT_CONVERSION = 'unit_conversion.txt'
+
+  @@unit_conversion = Hash[
+  *File.readlines(UNIT_CONVERSION).flat_map do |equation|
+    unit_nums = equation.chomp.split('=').map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}
+    unit_nums.flat_map{|un| un[1] = unit_nums.transpose[1].max / un[1]; un}
+  end
+  ]
+
+  def parse(formula)
+    self.class.parse(formula)
   end
 end
 
@@ -50,7 +54,7 @@ end
 
 ARGF.each do |line|
   no, *equ = line.chomp.split("\t")
-  equation = equ.map{|e| Equation.new(e)}
+  equation = equ.map{|e| UnitEquation.new(e)}
   equation.each{|e| e.solve}
   if equation.map(&:ans).uniq.size == 1
     puts "#{no}: Correct."
