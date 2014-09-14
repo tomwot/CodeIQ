@@ -1,65 +1,65 @@
 #coding: Windows-31J
 
-class UnitEquation
+class UnitsEquation
+  class Formula
+    def self.parse(formula, unknown='')
+      sign_before = '+'
+      formula.scan(/([-+]?)(\d+|#{unknown})([^-+\d#{unknown}]+)/).map do |sign, num_str, unit|
+        sign = sign_before if sign.empty?
+        sign_before = sign
+        {sign: sign, num_str: num_str, unit: unit}
+      end
+    end
+
+    def self.unit_conversion_table
+      @unit_conversion_table ||= Hash[
+      *File.readlines(UNIT_CONVERSION).flat_map do |equation|
+        unit_nums = Hash[*equation.chomp.split('=').flat_map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}]
+        unit_nums.flat_map{|unit, scale| [unit, unit_nums.values.max / scale]}
+      end
+      ]
+    end
+
+    UNIT_CONVERSION = 'unit_conversion.txt'
+  end
+
   attr_reader :equ, :ans
 
-  def initialize(equ)
+  def initialize(equ, unknown)
     @equ = equ
+    @unknown = unknown
   end
 
   def solve
-    left_str, right_str = @equ.split('=')
+    left_formula, right_formula = @equ.split('=')
 
-    unit_nums_str = parse(left_str) + parse(right_str).map{|r| r[:sign] = (r[:sign] == '-' ? '+' : '-'); r}
+    unit_nums_formula = Formula.parse(left_formula, @unknown) + Formula.parse(right_formula, @unknown).map{|r| r[:sign] = (r[:sign] == '-' ? '+' : '-'); r}
 
-    unknown = unit_nums_str.find{|un| un[:num_str] == '□'}
-    unit_nums_str.delete(unknown)
+    unknown = unit_nums_formula.find{|un| un[:num_str] == @unknown}
+    unit_nums_formula.delete(unknown)
 
-    minimum_unit_nums = unit_nums_str.map do |unit_num_str|
-      num = unit_num_str[:num_str].to_i
-      num = -num if unit_num_str[:sign] == unknown[:sign]
-      num * @@unit_conversion[unit_num_str[:unit]]
+    minimum_unit_nums = unit_nums_formula.map do |unit_num|
+      num = unit_num[:num_str].to_i
+      num = -num if unit_num[:sign] == unknown[:sign]
+      num * Formula.unit_conversion_table[unit_num[:unit]]
     end
 
-    @ans = minimum_unit_nums.inject(&:+) / @@unit_conversion[unknown[:unit]]
-  end
-
-  private
-
-  def self.parse(formula)
-    sign_before = '+'
-    formula.scan(/([-+]?)(\d+|□)([^-+\d□]+)/).map do |sign, num_str, unit|
-      sign = sign_before if sign.empty?
-      sign_before = sign
-      {sign: sign, num_str: num_str, unit: unit}
-    end
-  end
-
-  UNIT_CONVERSION = 'unit_conversion.txt'
-
-  @@unit_conversion = Hash[
-  *File.readlines(UNIT_CONVERSION).flat_map do |equation|
-    unit_nums = Hash[*equation.chomp.split('=').flat_map{|formula| parse(formula).flat_map{|un| [un[:unit], un[:num_str].to_i]}}]
-    unit_nums.flat_map{|unit, scale| [unit, unit_nums.values.max / scale]}
-  end
-  ]
-
-  def parse(formula)
-    self.class.parse(formula)
+    @ans = minimum_unit_nums.inject(&:+) / Formula.unit_conversion_table[unknown[:unit]]
   end
 end
 
 
 
-
-ARGF.each do |line|
-  no, *equ = line.chomp.split("\t")
-  equation = equ.map{|e| UnitEquation.new(e)}
-  equation.each{|e| e.solve}
-  if equation.map(&:ans).uniq.size == 1
-    puts "#{no}: Correct."
-  else
-    puts "#{no}: Wrong."
-    puts equation.map{|e| "  equation: #{e.equ}, answer: #{e.ans}"}
+if $0 == __FILE__
+  ARGF.each do |line|
+    no, *equ = line.chomp.split("\t")
+    equation = equ.map{|e| UnitsEquation.new(e, '□')}
+    equation.each{|e| e.solve}
+    if equation.map(&:ans).uniq.size == 1
+      puts "#{no}: Correct."
+    else
+      puts "#{no}: Wrong."
+      puts equation.map{|e| "  equation: #{e.equ}, answer: #{e.ans}"}
+    end
   end
 end
