@@ -1,5 +1,9 @@
 #coding: Windows-31J
 
+# 単位付1元1次方程式を解く。
+# 準備:
+#   - 'unit_conversion.txt'を用意し、単位換算式を記述する。次元が同一であれば同一行に記載する。
+
 class UnitsEquation
   class Formula
     def initialize(formula, unknown='')
@@ -25,8 +29,11 @@ class UnitsEquation
   end
 
   def solve
-    left_formula, right_formula = @equ.split('=').map{|formula| Formula.new(formula, @unknown).parse}
+    left_formula, right_formula = @equation.split('=').map{|formula| Formula.new(formula, @unknown).parse}
     unit_nums = left_formula + right_formula.map{|r| r[:sign] = (r[:sign] == '-' ? '+' : '-'); r}
+
+    # 式の中で単位が換算出来ない場合の処理
+    # return unless unit_nums.uniq{|un| @@unit_conversion_table[un[:unit]][:base_unit]}.size == 1
 
     unknown = unit_nums.find{|un| un[:num_str] == @unknown}
     unit_nums.delete(unknown)
@@ -34,21 +41,23 @@ class UnitsEquation
     minimum_unit_nums = unit_nums.map do |unit_num|
       num = unit_num[:num_str].to_i
       num = -num if unit_num[:sign] == unknown[:sign]
-      num * @@unit_conversion_table[unit_num[:unit]]
+      num * @@unit_conversion_table[unit_num[:unit]][:scale]
     end
 
-    @answer = minimum_unit_nums.inject(&:+) / @@unit_conversion_table[unknown[:unit]]
+    @answer = minimum_unit_nums.inject(&:+) / @@unit_conversion_table[unknown[:unit]][:scale]
   end
 
   UNIT_CONVERSION = 'unit_conversion.txt'
 
   @@unit_conversion_table =
-  File.readlines(UNIT_CONVERSION).each_with_object({}) do |equation, memo|
-    unit_nums = equation.chomp.split('=').each_with_object({}) do |formula, mm|
+  File.readlines(UNIT_CONVERSION).map(&:chomp).each_with_object({}) do |equation, memo|
+    unit_nums = equation.split('=').each_with_object({}) do |formula, mm|
       Formula.new(formula).parse.each{|f| mm[f[:unit]] = f[:num_str].to_i}
     end
-    unit_nums.each{|unit, scale| memo[unit] = unit_nums.values.max / scale}
+    base_unit, base_unit_scale = unit_nums.max_by{|unit, scale| scale}
+    unit_nums.each{|unit, scale| memo[unit] = {scale: base_unit_scale / scale, base_unit: base_unit}}
   end
+  @@unit_conversion_table.default = {base_unit: :base_unit}
 
 end
 
@@ -59,7 +68,7 @@ if $0 == __FILE__
     no, *equ = line.chomp.split("\t")
     equation = equ.map{|e| UnitsEquation.new(e, '□')}
     equation.each{|e| e.solve}
-    if equation.map(&:answer).uniq.size == 1
+    if equation.uniq(&:answer).size == 1
       puts "#{no}: Correct."
     else
       puts "#{no}: Wrong."
