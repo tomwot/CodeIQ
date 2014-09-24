@@ -31,7 +31,7 @@ class UnitsEquation
     unit_nums = left_formula + right_formula.map{|r| r[:sign] = (r[:sign] == '-' ? '+' : '-'); r}
 
     # ï˚íˆéÆÇÃíÜÇ≈íPà Ç™ä∑éZèoóàÇ»Ç¢èÍçáÇÃèàóù
-    # return unless unit_nums.uniq{|un| @@unit_conversion_table[un[:unit]][:base_unit]}.size == 1
+    # return unless unit_nums.uniq{|un| UNIT_CONVERSION_TABLE[un[:unit]][:base_unit]}.size == 1
 
     unknown = unit_nums.find{|un| un[:num_str] == @unknown}
     unit_nums.delete(unknown)
@@ -39,13 +39,13 @@ class UnitsEquation
     minimum_unit_nums = unit_nums.map do |unit_num|
       num = unit_num[:num_str].to_i
       num = -num if unit_num[:sign] == unknown[:sign]
-      num * @@unit_conversion_table[unit_num[:unit]][:scale]
+      num * UNIT_CONVERSION_TABLE[unit_num[:unit]][:scale]
     end
 
-    @answer = minimum_unit_nums.inject(&:+) / @@unit_conversion_table[unknown[:unit]][:scale]
+    @answer = minimum_unit_nums.inject(&:+) / UNIT_CONVERSION_TABLE[unknown[:unit]][:scale]
   end
 
-  @@unit_conversion_table =
+  UNIT_CONVERSION_TABLE =
   DATA.map(&:chomp).each_with_object({}) do |equation, memo|
     unit_nums = equation.split('=').each_with_object({}) do |formula, mm|
       Formula.new(formula).parse.each{|f| mm[f[:unit]] = f[:num_str].to_i}
@@ -53,7 +53,7 @@ class UnitsEquation
     base_unit, base_unit_scale = unit_nums.max_by{|unit, scale| scale}
     unit_nums.each{|unit, scale| memo[unit] = {scale: base_unit_scale / scale, base_unit: base_unit}}
   end
-  @@unit_conversion_table.default = {base_unit: :base_unit}
+  UNIT_CONVERSION_TABLE.default = {base_unit: :base_unit}
 
 end
 
