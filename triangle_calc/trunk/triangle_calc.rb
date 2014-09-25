@@ -5,7 +5,7 @@ def pick_num(source, prm)
   prm.zip(
   prm.map do |pr|
     if (answer = (source.find{|s| s[/#{pr}/] || s[/#{pr.reverse}/]}))
-      answer[/\d+/].to_i
+      answer[/\d+/].to_f
     else
       nil
     end
@@ -24,40 +24,29 @@ def solve(question)
 
 
   # 二等辺三角形は角度が1個分かれば残りの角度は算出できる。
-  if edge_length.values.compact.count == 2 &&
-    edge_length.values.compact.uniq.count == 1 &&
+  if edge_length.values.compact.count >= 2 &&
+    edge_length.values.compact.count - edge_length.values.compact.uniq.count == 1 &&
     angle_degree.values.compact.count == 1
-    top = %w(A B C).select{|e| edge_length.select{|k, v| v}.keys.all?{|k| k[/#{e}/]}}
+    top = %w(A B C).find{|e| edge_length.select{|k, v| edge_length.values.count(v) == 2}.keys.all?{|k| k[/#{e}/]}}
     if angle_degree[top]
-      (%w(A B C) - top).each{|a| angle_degree[a] = (180 - angle_degree[top]) / 2.0}
+      %w(A B C).delete_if{|t| t == top}.each{|a| angle_degree[a] = (180.0 - angle_degree[top]) / 2.0}
     else
-      (%w(A B C) - top).each{|a| angle_degree[a] = angle_degree.values.compact.first}
+      %w(A B C).delete_if{|t| t == top}.each{|a| angle_degree[a] = angle_degree.values.compact.first}
     end
   end
 
   # 三角形のうち角度が2個分かっていれば残りの角度は算出できる。。
   angle_degree[angle_degree.key(nil)] = 180 - angle_degree.values.compact.inject(&:+) if angle_degree.values.compact.count == 2
 
-  case angle_degree.values.compact.count
-  when 3
-    if edge_length.values.compact.uniq.count <= 1 &&
-      angle_degree.values.compact.uniq.count == 1 &&
-      angle_degree['A'] == 60
-      'あ'
-    elsif (edge_length.values.compact.count == 2 && edge_length.values.compact.uniq.count == 1) ||
-      angle_degree.values.compact.uniq.count == 2
-      'い'
-    else
-      'う'
-    end
+
+  if angle_degree.values.compact.count == 3
+    %w(あ い う)[angle_degree.values.compact.uniq.count - 1]
+  elsif edge_length.values.compact.count == 3
+    %w(あ い う)[edge_length.values.compact.uniq.count - 1]
+  elsif edge_length.values.compact.count == 2
+    %w(い う)[edge_length.values.compact.uniq.count - 1]
   else
-    if edge_length.values.compact.count == 3
-      %w(あ い う)[edge_length.values.compact.uniq.count - 1]
-    elsif edge_length.values.compact.count == 2
-      %w(い う)[edge_length.values.compact.uniq.count - 1]
-    else
-      'う'
-    end
+    'う'
   end
 
 end
