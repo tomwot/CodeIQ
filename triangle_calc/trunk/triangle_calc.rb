@@ -1,5 +1,12 @@
 #encoding: Windows-31J
 
+# CodeIQ：「中学入試から：正三角形？二等辺？」
+# https://codeiq.jp/ace/nabetani_takenori/q1097
+
+# 与えられた条件から三角形の種類を答える。
+# 中学入試なので余弦定理は無し＝本当は違う種類の三角形に分類される可能性あり。
+# そこまでは考慮しない。
+
 def pick_num(source, prm)
   prm.map do |pr|
     if (answer = (source.find{|s| s[/#{pr}/] || s[/#{pr.reverse}/]}))
@@ -12,35 +19,34 @@ end
 
 def solve(question)
   questions = question.split(',')
-  angle = questions.grep(/\A角/)
-  edge  = questions - angle
+  angle_cond = questions.grep(/\A角/)
+  edge_cond  = questions - angle_cond
 
-  edge_length  = pick_num(edge,  %w(AB BC CA))
-  angle_degree = pick_num(angle, %w(A B C))
+  angle = pick_num(angle_cond, %w(A  B  C))
+  edge  = pick_num(edge_cond,  %w(BC CA AB))
 
 
-  # 二等辺三角形は角度が1個分かれば残りの角度は算出できる。
-  if edge_length.compact.count >= 2 &&
-    edge_length.compact.count - edge_length.compact.uniq.count == 1 &&
-    angle_degree.compact.count == 1
-    top = (edge_length.index{|i| edge_length.count(i) == 1} - 1) % 2
-    if angle_degree[top]
-      angle_degree.each_index{|i| angle_degree[i] = (180.0 - angle_degree[top]) / 2.0 unless i == top}
+  # 3辺の長さが等しければ正三角形である。
+  angle.each_index{|i| angle[i] = 60.0} if edge.uniq.count == 1 && edge.first
+
+  # 二等辺三角形は角度が1個だけしか分からなくても残りの角度を算出できる。
+  if edge.count(nil) <= 1 && edge.uniq.count == 2 && angle.compact.count == 1
+    top = edge.index{|i| edge.count(i) == 1}
+    if angle[top]
+      angle.each_index{|i| angle[i] = (180.0 - angle[top]) / 2 unless i == top}
     else
-      angle_degree.each_index{|i| angle_degree[i] = angle_degree.compact.first unless i == top}
+      angle.each_index{|i| angle[i] = angle.compact.first unless i == top}
     end
   end
 
-  # 三角形のうち角度が2個分かっていれば残りの角度は算出できる。。
-  angle_degree[angle_degree.index(nil)] = 180.0 - angle_degree.compact.inject(&:+) if angle_degree.compact.count == 2
+  # 不明な角度が1個だけであればその角度は算出できる。
+  angle[angle.index(nil)] = 180.0 - angle.compact.inject(&:+) if angle.count(nil) == 1
 
 
-  if angle_degree.compact.count == 3
-    %w(あ い う)[angle_degree.compact.uniq.count - 1]
-  elsif edge_length.compact.count == 3
-    %w(あ い う)[edge_length.compact.uniq.count - 1]
-  elsif edge_length.compact.count == 2
-    %w(い う)[edge_length.compact.uniq.count - 1]
+  if angle.all?
+    %w(_ あ い う)[angle.uniq.count]
+  elsif edge.count(nil) <= 1
+    %w(_ _  い う)[edge.uniq.count]
   else
     'う'
   end
