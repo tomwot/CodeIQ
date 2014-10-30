@@ -10,10 +10,10 @@ color_space_code_table.map{|base, table| [base, table.map{|t| color_space_code_t
 ]
 
 
-ARGF.each_slice(2).each do |id, color_space_string|
-  color_space = color_space_string.chomp.chars
-  latest_base = color_space.shift
-  base_space = [latest_base] + color_space.map{|c| latest_base = color_space_table[latest_base][c.to_i]}
+ARGF.each_slice(2) do |id, color_space|
+  color_space_arr = color_space.chomp.chars
+  latest_base = color_space_arr.shift
+  base_space = [latest_base] + color_space_arr.map{|c| latest_base = color_space_table[latest_base][c.to_i]}
 
   puts id
   puts base_space.join
