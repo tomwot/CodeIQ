@@ -2,19 +2,23 @@
 # CodeIQ：「中学入試から：数字の個数」
 # https://codeiq.jp/ace/nabetani_takenori/q1138
 
-
+# AからBまでの整数の中に現れる文字 C の個数の合計を求める。
 
 def solve2(n, object)
-  m = n.to_s.split('')
-  (0 ... m.size).map do |digit|
-    x = m[0...digit].to_a.join.to_i
-    y = 10**(m.size - 1 - digit)
-    if m[digit].to_i > object
-      (x + (object > 0 && digit < m.size-1 ? 1 : 0)) * y + (digit == m.size-1 ? 1 : 0)
-    elsif m[digit].to_i == object
-      (x - (object == 0 && digit < m.size-1 ? 1 : 0)) * y + m[(digit+1)...m.size].to_a.join.to_i + 1
-    else
-      x * y
+  div = n
+  n.to_s.length.times.map do |digit|
+    m = div
+    div, mod = m.divmod(10)
+    order = 10**digit
+
+    if mod < object
+      div * order
+    elsif order == 1
+      div + 1
+    elsif mod > object
+      (div + (object >  0 ? 1 : 0)) * order
+    else # mod == object
+      (div - (object == 0 ? 1 : 0)) * order + n % order + 1
     end
   end.inject(&:+)
 end
@@ -26,8 +30,9 @@ end
 
 
 
-answer = []
 $stdout.sync = true
+
+answer = []
 
 ARGF.each do |line|
   id, question, expect = line.chomp.split("\t")
