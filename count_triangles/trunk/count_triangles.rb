@@ -8,11 +8,7 @@
 
 # #{n_pick}ŠpŒ`‚ª‰½í—Şì‚ê‚é‚©‚ğ•Ô‚·B
 def solve(n_divide, points, n_pick)
-  answers = points.map{|p| ('A'..'Z').to_a.index(p)}.combination(n_pick).to_a.uniq do |po|
-    edges = po.push(po.first + n_divide).each_cons(2).map{|a, b| b - a}
-    n_pick.times.map{|n| edges.rotate(n)}.min
-  end
-  answers.count
+  points.map{|p| ('A'..'Z').to_a.index(p)}.combination(n_pick).map{|p| p.map{|po| p.map{|poi| (poi - po) % n_divide}.sort}.min}.uniq.count
 end
 
 
