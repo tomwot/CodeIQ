@@ -1,0 +1,44 @@
+◆タイトル（必須）
+余計な事しなくて良いのに
+◆使用言語（必須）
+Ruby
+◆プログラム（必須）
+$strInput = ARGF.gets
+$arrInput = $strInput.scan(/(.)/)
+
+$arrInput.each_with_index{|arrA, intI|
+Array['C'] == arrA ? $arrInput[0] = "Q" : Array[?d] == arrA ? $arrInput[2] = 'e' : Array["e"] == arrA ? $arrInput[3] = ?d : Array['I'] == arrA ? $arrInput[4] = "o" : Array[?o] == arrA ? $arrInput[1] = 'I' : Array["Q"] == arrA ? $arrInput[5] = ?C : nil
+}
+
+$strTmp = ""
+$arrInput.each_with_index{|strI, intI|
+$strTmp = $strTmp + strI[-1].capitalize + " "
+}
+$arrReturn = $strTmp.scan(/(.)/)
+$arrReturn[11] = ""
+
+puts $arrReturn.join("")
+
+◆ポイント（必須）
+・インデント無し。
+・無意味なグローバル変数。
+・システムハンガリアン。
+・ARGF.getsはgetsだけで良い。
+・一文字ずつ切り出すのが目的であればString#scanの引数の括弧は無意味。
+・each_with_indexのブロックパラメータのインデックスを使っていない（のであればeachで十分）。
+・三項演算子の連打。
+・三項演算子の順番が意味不明（左辺の大文字小文字を無視した昇順）。
+・無意味なArray[]。
+・レシーバをブロック内で書き換えしている。
+・文字列リテラルの記述が不統一（'a', "a", ?a）。
+・一文字しかない事が明らかな文字列にインデックスを指定している。しかも-1。
+・文字列を大文字にするのに一文字しかないからと言ってString#capitalizeを使っている。
+・Array#joinをコーディングしている。
+・+=を使っていない。
+・上（8～13行目）ではArray#joinを使っていないのに下（15行目）では使っている。でも引数が空文字列なら引数を省略可。
+・入力が"CodeIQ"以外の場合に、想定通りに動作することが期待できない。
+
+◆フリーコメント（任意）
+・上記「ポイント」には、Rubyスクリプトとしての観点とプログラム一般としての観点が混ざっています。
+・「RuboCop問題」と似た感じで楽しめました。
+・「システムハンガリアン」をポイントに挙げるのは議論の元になる？でも少なくともRubyの世界では変だと思います。
