@@ -1,1 +1,1 @@
-main(a){scanf("%d",&a);a=a+~a%2&10923;vprintf();}
+main(a){a=scanf("%d",&a)|--a&10922;vprintf();}
