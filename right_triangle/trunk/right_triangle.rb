@@ -5,7 +5,6 @@
 # とりあえず思い付いたものです。ゴルフするかどうかは今後のやる気次第。
 
 x=gets.chomp.split(',')
-y=x.map{|n| "#{n}.".split('.',3)[1].size}
-z=x.zip(y).map{|m,n| (m.delete('.') + "0"*(y.max - n)).to_i**2}
-w=(0..2).find{|t| a,b,c=z.rotate(t);a==b+c}
-puts %w(A B C x)[w||3]
+y=x.map{|n|s,t,_="#{n}.".split('.',3);(s+t.ljust(4,'0')).to_i**2}
+z=(0..2).find{|t| a,b,c=y.rotate(t);a==b+c}
+puts %w(A B C x)[z||3]
