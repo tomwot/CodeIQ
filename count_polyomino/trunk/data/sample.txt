@@ -1,0 +1,6 @@
+ff f0 ef f1 df f2 cf ff
+ff 9d a5 a5 dd 9b b1 ff
+ff 8d ad 8d fd 8d 8d ff
+bf a1 ad ad a5 bd 81 ff
+3f 39 c9 cf f3 93 9c fc
+ff 99 bd e7 bd bf e3 ff
