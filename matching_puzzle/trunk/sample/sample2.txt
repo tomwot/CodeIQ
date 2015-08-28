@@ -1,0 +1,7 @@
+2 3
+D c b a
+e c B D
+a e D B
+c A d A
+b a d C
+d E d d
