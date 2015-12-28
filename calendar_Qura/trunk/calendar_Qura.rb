@@ -1,1 +1,1 @@
-putc(116+('%04d'*3%gets.tr('A-K.','06565656545 ').split).to_i%7)
+putc ('%04d'*3%gets.tr('A-K.','06565656545 ').split).to_i%7+116
