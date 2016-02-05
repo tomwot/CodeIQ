@@ -1,1 +1,1 @@
-n=[0]*4+[1];100.times{p n.rotate!.inject(&:+);n[3]+=n[4];n[4]+=n[0]}
+puts a=[1]*4;a=[0]+a;96.times{|n|p a[n]=a[n-4]*2+a[n-5]}
