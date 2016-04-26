@@ -37,4 +37,4 @@ end
 
 answer, min = solve(N_PLAYERS - 1, lines, [], N_PLAYERS * CARD_SIZE)
 p min
-#p answer.compact.select{|ans| ans.size == min}.map(&:sort)
+p answer.compact.select{|ans| ans.size == min}.map(&:sort)
