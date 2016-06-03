@@ -1,1 +1,1 @@
-puts gets.split(',').map{|n|a=[];m=n.to_i;a<<m=(m+1+(m-1)/5)/3while m>1;a}.inject(&:&).max||?-
+puts gets.split(?,).map{|n|a=[];m=n.to_i;a<<m=(~-m/5-~m)/3while m>1;a}.inject(&:&).max||?-
